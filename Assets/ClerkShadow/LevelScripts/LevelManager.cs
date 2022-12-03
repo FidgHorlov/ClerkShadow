@@ -7,11 +7,10 @@ namespace ClerkShadow.LevelScripts
 {
     public class LevelManager : MonoBehaviour
     {
-        [SerializeField] private LevelData _levelData;
         [SerializeField] private GameController _gameController;
         [SerializeField] private Image _loaderScreen;
-        [SerializeField] private List<Sprite> _loaderSprites;
         [SerializeField] private Sprite _finalSprite;
+        [Space] [SerializeField] private List<Level> _levelDataList;
 
         private int _currentLevelID;
         private const float LevelDelay = 4f; 
@@ -28,7 +27,8 @@ namespace ClerkShadow.LevelScripts
         {
             _loaderScreen.gameObject.SetActive(true);
             _currentLevelID = LoadLevelID();
-            _loaderScreen.sprite = _loaderSprites[_currentLevelID];
+            _currentlyLoadedLevel = _levelDataList[_currentLevelID];
+            _loaderScreen.sprite = _currentlyLoadedLevel.LoadingSprite;
             yield return new WaitForSeconds(LevelDelay);
             _loaderScreen.gameObject.SetActive(false);
             LoadLevel();
@@ -36,9 +36,16 @@ namespace ClerkShadow.LevelScripts
 
         private void LoadLevel()
         {
-            _currentlyLoadedLevel = Instantiate(_levelData.Levels[_currentLevelID]);
+            _currentlyLoadedLevel = ShowLevel();
             _gameController.SetTimeForLevel(_currentlyLoadedLevel.LevelDuration);
             SubscribeOnComplete();
+        }
+
+        private Level ShowLevel()
+        {
+            _currentlyLoadedLevel?.SetActive(false);
+            _levelDataList[_currentLevelID].SetActive(true);
+            return _levelDataList[_currentLevelID];
         }
 
         private void SubscribeOnComplete()

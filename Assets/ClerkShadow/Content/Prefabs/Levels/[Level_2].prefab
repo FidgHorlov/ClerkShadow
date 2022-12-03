@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _levelDuration: 20
+  _loadingSprite: {fileID: 21300000, guid: 04086908bc99ddb488d402e54f133f60, type: 3}
   _exit: {fileID: 5659768868498994839}
 --- !u!1001 &2224617250138920212
 PrefabInstance:
@@ -411,7 +412,7 @@ PrefabInstance:
     - target: {fileID: 1479988128507317268, guid: 20509900ea12aba4ca1fded404ddf5b1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1479988128507317268, guid: 20509900ea12aba4ca1fded404ddf5b1,
         type: 3}
@@ -516,7 +517,7 @@ PrefabInstance:
     - target: {fileID: 5467440067184461441, guid: 20509900ea12aba4ca1fded404ddf5b1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5467440067184461441, guid: 20509900ea12aba4ca1fded404ddf5b1,
         type: 3}

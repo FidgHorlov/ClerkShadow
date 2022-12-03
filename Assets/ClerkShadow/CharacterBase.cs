@@ -8,7 +8,7 @@ namespace ClerkShadow
         [SerializeField] private Transform _targetTransform;
         [SerializeField] private Vector3 _offset;
         [SerializeField] private AnimationManager _animationManager;
-    
+
         private Transform _currentTransform;
         private Vector3 _defaultScale;
         private Vector3 _flippedScale;
