@@ -7,19 +7,25 @@ namespace ClerkShadow.LevelScripts
 {
     public class LevelManager : MonoBehaviour
     {
+        private const float LevelDelay = 4f;
+        
         [SerializeField] private GameController _gameController;
         [SerializeField] private Image _loaderScreen;
         [SerializeField] private Sprite _finalSprite;
         [Space] [SerializeField] private List<Level> _levelDataList;
 
         private int _currentLevelID;
-        private const float LevelDelay = 4f; 
         private Level _currentlyLoadedLevel;
 
         void Start()
         {
             //ResetLevelID();
             //LoadLevel();
+            foreach (Level level in _levelDataList)
+            {
+                level.SetActive(false);
+            }
+            
             StartCoroutine(SetPicture());
         }
 
@@ -43,7 +49,7 @@ namespace ClerkShadow.LevelScripts
 
         private Level ShowLevel()
         {
-            _currentlyLoadedLevel?.SetActive(false);
+            _currentlyLoadedLevel.SetActive(false);
             _levelDataList[_currentLevelID].SetActive(true);
             return _levelDataList[_currentLevelID];
         }
