@@ -27,8 +27,8 @@ namespace ClerkShadow
     
         public void ResetGameState()
         {
-            _characterBase.transform.position = _characterStartPosition;
-//        _characterShadow.transform.position = _shadowStartPosition;
+            _characterBase.transform.position = _characterStartPosition; 
+            _characterShadow.transform.position = _shadowStartPosition;
             _characterShadow.ResetPlayer();
             _lightsController.ResetLights();
             SceneManager.LoadScene(1);

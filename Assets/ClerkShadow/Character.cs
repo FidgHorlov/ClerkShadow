@@ -1,4 +1,5 @@
-﻿using ClerkShadow.Data;
+﻿using System.Collections;
+using ClerkShadow.Data;
 using DG.Tweening;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace ClerkShadow
     public class Character : MonoBehaviour
     {
         [SerializeField] private AnimationManager _animationManager;
+        [SerializeField] private Rigidbody2D _rigidbody2D;
         [SerializeField] private float _speed;
         [Header("Resizing")] 
         [SerializeField] private float _targetSize;
@@ -14,7 +16,6 @@ namespace ClerkShadow
     
 #region Private fields
         private Transform _currentTransform;
-        private Rigidbody2D _rigidbody2D;
         private Vector3 _defaultFlippedSize;
         private Vector3 _targetSizeVector;
         private Vector3 _currentSize;
@@ -35,7 +36,6 @@ namespace ClerkShadow
 #region Monobehaviour
         protected  void Awake()
         {
-            _rigidbody2D = GetComponent<Rigidbody2D>();
             _currentTransform = transform;
             _defaultPosition = _currentTransform.position;
             _currentSize = _currentTransform.localScale;
@@ -48,11 +48,7 @@ namespace ClerkShadow
         private void FixedUpdate()
         {
             Move();
-            if (Input.GetKeyDown(KeyCode.Space) && _isJumpAllowed)
-            {
-                _animationManager.SetTrigger(Constants.AnimationState.Jump);
-                _rigidbody2D.AddForce(_currentTransform.up * _jumpForce, ForceMode2D.Impulse);
-            } 
+            Jump();
         }
 
         private void OnCollisionStay2D(Collision2D other)
@@ -102,6 +98,17 @@ namespace ClerkShadow
             _rigidbody2D.velocity = new Vector2(horizontal * _speed, _rigidbody2D.velocity.y);
             IsRunning = horizontal != 0;
             _animationManager.SetBool(Constants.AnimationState.Run, IsRunning);
+        }
+        
+        private void Jump()
+        {
+            if (!Input.GetKeyDown(KeyCode.Space) || !_isJumpAllowed)
+            {
+                return;
+            }
+
+            _animationManager.SetTrigger(Constants.AnimationState.Jump);
+            _rigidbody2D.AddForce(_currentTransform.up * _jumpForce, ForceMode2D.Impulse);
         }
     
         private void Flip()
