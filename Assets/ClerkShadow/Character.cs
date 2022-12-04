@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using ClerkShadow.Data;
+﻿using ClerkShadow.Data;
 using DG.Tweening;
 using UnityEngine;
 
@@ -47,13 +46,12 @@ namespace ClerkShadow
         }
         private void FixedUpdate()
         {
-            Move();
-            Jump();
+            Movement();
         }
 
         private void OnCollisionStay2D(Collision2D other)
         {
-            if (CheckTheTag(other, Constants.Tags.Ground) || CheckTheTag(other, Constants.Tags.Obstacle))
+            if (CheckTheJumpPossibilities(other))
             {
                 _isJumpAllowed = true;
             }
@@ -61,13 +59,19 @@ namespace ClerkShadow
 
         private void OnCollisionExit2D(Collision2D other)
         {
-            if (CheckTheTag(other, Constants.Tags.Ground))
+            if (CheckTheJumpPossibilities(other))
             {
                 _isJumpAllowed = false;
             }
         }
+
 #endregion
 
+        private bool CheckTheJumpPossibilities(Collision2D other)
+        {
+            return CheckTheTag(other, Constants.Tags.Ground) || CheckTheTag(other, Constants.Tags.Obstacle);
+        }
+        
         private bool CheckTheTag(Collision2D targetCollision, string targetTag)
         {
             return targetCollision.gameObject.CompareTag(targetTag);
@@ -75,7 +79,7 @@ namespace ClerkShadow
     
 #region Pose changing
 
-        private void Move()
+        private void Movement()
         {
             float horizontal = Input.GetAxis("Horizontal");
             if (horizontal < 0f)
@@ -98,19 +102,16 @@ namespace ClerkShadow
             _rigidbody2D.velocity = new Vector2(horizontal * _speed, _rigidbody2D.velocity.y);
             IsRunning = horizontal != 0;
             _animationManager.SetBool(Constants.AnimationState.Run, IsRunning);
-        }
-        
-        private void Jump()
-        {
+
             if (!Input.GetKeyDown(KeyCode.Space) || !_isJumpAllowed)
             {
                 return;
             }
 
+            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _jumpForce);
             _animationManager.SetTrigger(Constants.AnimationState.Jump);
-            _rigidbody2D.AddForce(_currentTransform.up * _jumpForce, ForceMode2D.Impulse);
         }
-    
+
         private void Flip()
         {
             _currentSize.x *= -1f;
