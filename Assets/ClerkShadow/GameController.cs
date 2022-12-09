@@ -39,6 +39,7 @@ namespace ClerkShadow
             _timeForLevel = timeForLevel;
             _characterShadow.StartResize(_timeForLevel);
             _lightsController.StartLighting(_timeForLevel);
+            _characterShadow.IsGameStarted = true;
             PlayAmbientAudio();
         }
 
@@ -49,12 +50,14 @@ namespace ClerkShadow
                 Application.Quit();
             }
             _characterBase.RunAnimation(_characterShadow.IsRunning);
-        
-            if (_characterShadow.IsLevelReset)
+
+            if (!_characterShadow.IsLevelReset)
             {
-                _characterShadow.IsLevelReset = true;
-                ResetGameState();
+                return;
             }
+            
+            _characterShadow.IsLevelReset = true;
+            ResetGameState();
         }
 
         private void PlayAmbientAudio()
