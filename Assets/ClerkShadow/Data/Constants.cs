@@ -1,7 +1,11 @@
-﻿namespace ClerkShadow.Data
+﻿using DG.Tweening;
+
+namespace ClerkShadow.Data
 {
     public static class Constants 
     {
+        public const Ease DoTweenDefaultEase = Ease.InSine;
+        
         public static class Tags
         {
             public const string Player = "Player";
