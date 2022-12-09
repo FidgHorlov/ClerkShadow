@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using ClerkShadow.Data;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,10 +33,14 @@ namespace ClerkShadow
         public void StartLighting(float duration)
         {
             _spotImage.DOKill(_spotImage.sprite);
-            _spotImage.DOColor(_endColor, duration).SetId(_spotImage.sprite);
+            _spotImage.DOColor(_endColor, duration)
+                .SetEase(Constants.DoTweenDefaultEase)
+                .SetId(_spotImage.sprite);
 
             _spotTransform.DOKill(_spotTransform);
-            _spotTransform.DOScale(MaximumSize, duration).SetId(_spotTransform);
+            _spotTransform.DOScale(MaximumSize, duration)
+                .SetEase(Constants.DoTweenDefaultEase)
+                .SetId(_spotTransform);
         }
 
         public void ResetLights()
