@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,10 +10,20 @@ namespace ClerkShadow.LevelScripts
     public class LevelManager : MonoBehaviour
     {
         private const float LevelDelay = 4f;
-        
+        private const float AnimationDuration = 0.5f;
+        private const string LevelCaptionTemplate = "Розділ {0}";
+
         [SerializeField] private GameController _gameController;
-        [SerializeField] private Image _loaderScreen;
         [SerializeField] private Sprite _finalSprite;
+
+        [Header("Level UI info")]
+        [SerializeField] private CanvasGroup _canvasGroup;
+        [SerializeField] private TextMeshProUGUI _finalDescription;
+        [SerializeField] private Image _backgroundColor;
+        [Space]
+        [SerializeField] private Image _chapterIcon;
+        [SerializeField] private TextMeshProUGUI _levelCaption;
+        [SerializeField] private TextMeshProUGUI _levelDescription;
         [Space] [SerializeField] private List<Level> _levelDataList;
 
         private int _currentLevelID;
@@ -19,25 +31,62 @@ namespace ClerkShadow.LevelScripts
 
         void Start()
         {
-            //ResetLevelID();
-            //LoadLevel();
             foreach (Level level in _levelDataList)
             {
                 level.SetActive(false);
             }
-            
+
             StartCoroutine(SetPicture());
         }
 
         private IEnumerator SetPicture()
         {
-            _loaderScreen.gameObject.SetActive(true);
             _currentLevelID = LoadLevelID();
             _currentlyLoadedLevel = _levelDataList[_currentLevelID];
-            _loaderScreen.sprite = _currentlyLoadedLevel.LoadingSprite;
+            SetLevelData();
+            ShowHideCanvas(true);
             yield return new WaitForSeconds(LevelDelay);
-            _loaderScreen.gameObject.SetActive(false);
+            ShowHideCanvas(false);
             LoadLevel();
+        }
+
+        private bool _wasFinalStage;
+        
+        private void SetLevelData()
+        {
+            if (_wasFinalStage)
+            {
+                _chapterIcon.gameObject.SetActive(true);
+                _levelCaption.gameObject.SetActive(true);
+                _levelDescription.gameObject.SetActive(true);
+                _finalDescription.gameObject.SetActive(false);
+                _backgroundColor.color = Color.black;
+                _wasFinalStage = false;
+            }
+
+            if (_currentlyLoadedLevel.LoadingSprite.Equals(null))
+            {
+                _chapterIcon.gameObject.SetActive(false);
+                _levelCaption.gameObject.SetActive(false);
+                _levelDescription.gameObject.SetActive(false);
+                _finalDescription.gameObject.SetActive(true);
+                _finalDescription.text = _currentlyLoadedLevel.LevelDescription;
+                _backgroundColor.color = Color.white;
+                _wasFinalStage = true;
+            }
+            else
+            {
+                _chapterIcon.sprite = _currentlyLoadedLevel.LoadingSprite;
+                _levelDescription.text = _currentlyLoadedLevel.LevelDescription;
+                _levelCaption.text = string.Format(LevelCaptionTemplate, _currentLevelID);
+            }
+        }
+
+        private void ShowHideCanvas(bool toShow, float time = -1f)
+        {
+            float duration = time < 0 ? AnimationDuration : time;
+            _canvasGroup.DOKill(_canvasGroup);
+            _canvasGroup.DOFade(toShow ? 1f : 0f, duration).SetId(_canvasGroup);
         }
 
         private void LoadLevel()
@@ -65,20 +114,21 @@ namespace ClerkShadow.LevelScripts
             _currentlyLoadedLevel.Exit.TriggerEntered -= OnLevelComplete;
         }
 
-        public void OnLevelComplete(Collider2D obj)
+        private void OnLevelComplete(Collider2D obj)
         {
             Debug.Log(_currentlyLoadedLevel.gameObject);
             Destroy(_currentlyLoadedLevel.gameObject);
             _gameController.ResetGameState();
             _currentLevelID++;
-            if (_currentLevelID > 2)
+            if (_currentLevelID > _levelDataList.Count)
             {
-                _loaderScreen.sprite = _finalSprite;
+                _chapterIcon.sprite = _finalSprite;
                 _currentLevelID = 0;
                 SaveLevelID();
+                UnsubscribeOnComplete();
                 return;
             }
-        
+
             SaveLevelID();
             StartCoroutine(SetPicture());
         }
@@ -91,11 +141,13 @@ namespace ClerkShadow.LevelScripts
         private int LoadLevelID()
         {
             int currentLevelId = PlayerPrefs.GetInt("CurrentLevel", _currentLevelID);
-            if (currentLevelId > 2)
+            if (currentLevelId < _levelDataList.Count)
             {
-                currentLevelId = 2;
+                return currentLevelId;
             }
 
+            currentLevelId = 0;
+            ResetLevelID();
             return currentLevelId;
         }
 

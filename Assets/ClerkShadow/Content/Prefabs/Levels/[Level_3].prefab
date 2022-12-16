@@ -58,8 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93c0578c04f037145ac4b6bac2f71809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _levelDuration: 30
-  _loadingSprite: {fileID: 21300000, guid: 3e698647631a0c24b899505af18b3f6c, type: 3}
+  _levelData: {fileID: 11400000, guid: f343c3025f53d9a4a9ca155a3bfc80db, type: 2}
   _exit: {fileID: 3512325387205370559}
 --- !u!1 &2323745274819294189
 GameObject:
@@ -888,6 +887,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7597412270350057069}
     m_Modifications:
+    - target: {fileID: 546405472121039634, guid: 914b466982802a346a00b15d617a7446,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3827443186674353233, guid: 914b466982802a346a00b15d617a7446,
         type: 3}
       propertyPath: m_Name
@@ -1660,7 +1664,7 @@ PrefabInstance:
     - target: {fileID: 1479988128507317268, guid: 20509900ea12aba4ca1fded404ddf5b1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2267126109512066217, guid: 20509900ea12aba4ca1fded404ddf5b1,
         type: 3}
@@ -1760,7 +1764,7 @@ PrefabInstance:
     - target: {fileID: 5467440067184461441, guid: 20509900ea12aba4ca1fded404ddf5b1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5467440067184461441, guid: 20509900ea12aba4ca1fded404ddf5b1,
         type: 3}

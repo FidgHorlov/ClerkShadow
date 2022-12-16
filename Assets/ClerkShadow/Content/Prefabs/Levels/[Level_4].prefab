@@ -85,8 +85,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93c0578c04f037145ac4b6bac2f71809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _levelDuration: 32
-  _loadingSprite: {fileID: 21300000, guid: 3e698647631a0c24b899505af18b3f6c, type: 3}
+  _levelData: {fileID: 11400000, guid: 6cafe1a9ce7650d4bad9707a63dde47b, type: 2}
   _exit: {fileID: 3512325387205370559}
 --- !u!1 &2323745274819294189
 GameObject:
@@ -1632,7 +1631,7 @@ PrefabInstance:
     - target: {fileID: 1479988128507317268, guid: 20509900ea12aba4ca1fded404ddf5b1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2267126109512066217, guid: 20509900ea12aba4ca1fded404ddf5b1,
         type: 3}
@@ -1737,7 +1736,7 @@ PrefabInstance:
     - target: {fileID: 5467440067184461441, guid: 20509900ea12aba4ca1fded404ddf5b1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5467440067184461441, guid: 20509900ea12aba4ca1fded404ddf5b1,
         type: 3}

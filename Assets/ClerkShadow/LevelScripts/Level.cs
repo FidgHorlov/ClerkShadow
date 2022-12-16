@@ -4,12 +4,13 @@ namespace ClerkShadow.LevelScripts
 {
     public class Level : MonoBehaviour
     {
-        [SerializeField] private float _levelDuration;
-        [SerializeField] private Sprite _loadingSprite;
+        [SerializeField] private LevelData _levelData;
         [SerializeField] private LevelExit _exit;
-        public float LevelDuration => _levelDuration;
+        
         public LevelExit Exit => _exit;
-        public Sprite LoadingSprite => _loadingSprite;
+        public float LevelDuration => _levelData.LevelDuration;
+        public Sprite LoadingSprite => _levelData.LoadingSprite;
+        public string LevelDescription => _levelData.LevelDescription;
 
         public void SetActive(bool toActivate)
         {
