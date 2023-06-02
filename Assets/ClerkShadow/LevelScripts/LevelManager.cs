@@ -17,16 +17,18 @@ namespace ClerkShadow.LevelScripts
         [SerializeField] private Sprite _finalSprite;
 
         [Header("Level UI info")]
-        [SerializeField] private CanvasGroup _canvasGroup;
+        [SerializeField]
+        private CanvasGroup _canvasGroup;
+
         [SerializeField] private TextMeshProUGUI _finalDescription;
         [SerializeField] private Image _backgroundColor;
-        [Space]
-        [SerializeField] private Image _chapterIcon;
+        [Space] [SerializeField] private Image _chapterIcon;
         [SerializeField] private TextMeshProUGUI _levelCaption;
         [SerializeField] private TextMeshProUGUI _levelDescription;
         [Space] [SerializeField] private List<Level> _levelDataList;
 
         private int _currentLevelID;
+        private bool _wasFinalStage;
         private Level _currentlyLoadedLevel;
 
         void Start()
@@ -50,8 +52,6 @@ namespace ClerkShadow.LevelScripts
             LoadLevel();
         }
 
-        private bool _wasFinalStage;
-        
         private void SetLevelData()
         {
             if (_wasFinalStage)
@@ -78,7 +78,7 @@ namespace ClerkShadow.LevelScripts
             {
                 _chapterIcon.sprite = _currentlyLoadedLevel.LoadingSprite;
                 _levelDescription.text = _currentlyLoadedLevel.LevelDescription;
-                _levelCaption.text = string.Format(LevelCaptionTemplate, _currentLevelID);
+                _levelCaption.text = string.Format(LevelCaptionTemplate, _currentLevelID + 1);
             }
         }
 

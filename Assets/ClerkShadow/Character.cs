@@ -7,27 +7,34 @@ namespace ClerkShadow
 {
     public class Character : MonoBehaviour
     {
-        [SerializeField] private AnimationManager _animationManager;
+        private const float CheckPosition = 0.2f;
+        private const string GroundLayerMaskName = "JumpArea";
+        
+        [SerializeField] private Transform _groundCheck;
+        [Space] [SerializeField] private AnimationManager _animationManager;
         [SerializeField] private Rigidbody2D _rigidbody2D;
         [SerializeField] private float _speed;
         [Header("Resizing")] [SerializeField] private float _targetSize;
         [SerializeField] private float _jumpForce;
+        [SerializeField] private float _longJumpForce;
 
+        
 #region Private fields
 
+        private LayerMask _groundLayerMask;
         private Transform _currentTransform;
         private Vector3 _defaultFlippedSize;
         private Vector3 _targetSizeVector;
         private Vector3 _currentSize;
         private Vector3 _defaultSize;
         private Vector3 _defaultPosition;
+        private TimeSpan _startResizing;
 
         private float _currentDuration; // keep the duration for resizing
         private float _resizeDurationLeft;
         private float _timeCounter;
         private bool _isLeftLooking;
 
-        private bool _isJumpAllowed;
         private bool _isScaling;
 
 #endregion
@@ -43,11 +50,11 @@ namespace ClerkShadow
             _currentTransform = transform;
             _defaultPosition = _currentTransform.position;
             _currentSize = _currentTransform.localScale;
-            _isJumpAllowed = true;
             _targetSizeVector = new Vector3(_targetSize, _targetSize, _targetSize);
             _defaultSize = _currentSize;
             _defaultFlippedSize = _defaultSize;
             _defaultFlippedSize.x *= -1f;
+            _groundLayerMask = LayerMask.GetMask(GroundLayerMaskName);
         }
 
         private void FixedUpdate()
@@ -60,32 +67,51 @@ namespace ClerkShadow
             Movement();
         }
 
-        private void OnCollisionStay2D(Collision2D other)
+        private void Update()
         {
-            if (CheckTheJumpPossibilities(other))
+            if (!IsGameStarted)
             {
-                _isJumpAllowed = true;
+                return;
             }
-        }
 
-        private void OnCollisionExit2D(Collision2D other)
-        {
-            if (CheckTheJumpPossibilities(other))
-            {
-                _isJumpAllowed = false;
-            }
+            Jump();
         }
 
 #endregion
 
-        private bool CheckTheJumpPossibilities(Collision2D other)
+        public void ResetPlayer()
         {
-            return CheckTheTag(other, Constants.Tags.Ground) || CheckTheTag(other, Constants.Tags.Obstacle);
+            _currentTransform.DOKill();
+            _isScaling = false;
+            _currentSize = _isLeftLooking ? _defaultFlippedSize : _defaultSize;
+            _currentTransform.localScale = _currentSize;
+            _currentTransform.position = _defaultPosition;
         }
 
-        private bool CheckTheTag(Collision2D targetCollision, string targetTag)
+        public void StartResize(float duration = -1f)
         {
-            return targetCollision.gameObject.CompareTag(targetTag);
+            if (duration > 0)
+            {
+                _currentDuration = duration;
+                _resizeDurationLeft = _currentDuration;
+                _startResizing = DateTime.Now.TimeOfDay;
+            }
+            else
+            {
+                _resizeDurationLeft = _currentDuration - (DateTime.Now.TimeOfDay - _startResizing).Seconds;
+            }
+
+            _isScaling = true;
+            _currentTransform
+                .DOScale(_targetSizeVector, _resizeDurationLeft)
+                .SetEase(Constants.DoTweenDefaultEase)
+                .OnUpdate(() => { _currentSize = _currentTransform.localScale; })
+                .OnComplete(() =>
+                {
+                    HideShadow();
+                    _isScaling = false;
+                    _currentTransform.DOKill();
+                });
         }
 
 #region Pose changing
@@ -113,15 +139,28 @@ namespace ClerkShadow
             _rigidbody2D.velocity = new Vector2(horizontal * _speed, _rigidbody2D.velocity.y);
             IsRunning = horizontal != 0;
             _animationManager.SetBool(Constants.AnimationState.Run, IsRunning);
+        }
 
-            if (!Input.GetKeyDown(KeyCode.Space) || !_isJumpAllowed)
+        private void Jump()
+        {
+            if (Input.GetKeyDown(KeyCode.Space) && IsGrounded() && !IsPlayerInAir())
             {
+                _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _jumpForce);
+                //_rigidbody2D.AddForce(new Vector2(0f, _jumpForce));
+                _animationManager.SetTrigger(Constants.AnimationState.Jump);
                 return;
             }
 
-            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _jumpForce);
-            _animationManager.SetTrigger(Constants.AnimationState.Jump);
+            if (Input.GetKeyUp(KeyCode.Space) && IsPlayerInAir())
+            {
+                
+                _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _longJumpForce);
+                //_animationManager.SetTrigger(Constants.AnimationState.Jump);
+                // _rigidbody2D.AddForce(new Vector2(0f, _longJumpForce));
+            }
         }
+
+        private bool IsPlayerInAir() => _rigidbody2D.velocity.y > 0;
 
         private void Flip()
         {
@@ -135,51 +174,13 @@ namespace ClerkShadow
             StartResize();
         }
 
-        public void ResetPlayer()
-        {
-            _currentTransform.DOKill();
-            _isScaling = false;
-            _currentSize = _isLeftLooking ? _defaultFlippedSize : _defaultSize;
-            _currentTransform.localScale = _currentSize;
-            _currentTransform.position = _defaultPosition;
-        }
-
-        private TimeSpan _startResizing;
-
-        public void StartResize(float duration = -1f)
-        {
-            if (duration > 0)
-            {
-                _currentDuration = duration;
-                _resizeDurationLeft = _currentDuration;
-                _startResizing = DateTime.Now.TimeOfDay;
-            }
-            else
-            {
-                _resizeDurationLeft = _currentDuration - (DateTime.Now.TimeOfDay - _startResizing).Seconds;
-            }
-
-            _isScaling = true;
-            _currentTransform
-                .DOScale(_targetSizeVector, _resizeDurationLeft)
-                .SetEase(Constants.DoTweenDefaultEase)
-                .OnUpdate(() =>
-                {
-                    _currentSize = _currentTransform.localScale;
-                })
-                .OnComplete(() =>
-                {
-                    HideShadow();
-                    _isScaling = false;
-                    _currentTransform.DOKill();
-                });
-        }
+#endregion
 
         private void HideShadow()
         {
             IsLevelReset = true;
         }
 
-#endregion
+        private bool IsGrounded() => Physics2D.OverlapCircle(_groundCheck.position, CheckPosition, _groundLayerMask);
     }
 }

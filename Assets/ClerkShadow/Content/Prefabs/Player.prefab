@@ -79,11 +79,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aa4accc58da2424b8e971c9e63c7599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _groundCheck: {fileID: 0}
   _animationManager: {fileID: 4551901372639967155}
   _rigidbody2D: {fileID: 8311820358919310870}
   _speed: 3
   _targetSize: 0.7
-  _jumpForce: 7
+  _jumpForce: 5
+  _longJumpForce: 5
 --- !u!95 &600647542910756914
 Animator:
   serializedVersion: 3
