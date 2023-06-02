@@ -146,17 +146,13 @@ namespace ClerkShadow
             if (Input.GetKeyDown(KeyCode.Space) && IsGrounded() && !IsPlayerInAir())
             {
                 _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _jumpForce);
-                //_rigidbody2D.AddForce(new Vector2(0f, _jumpForce));
                 _animationManager.SetTrigger(Constants.AnimationState.Jump);
                 return;
             }
 
             if (Input.GetKeyUp(KeyCode.Space) && IsPlayerInAir())
             {
-                
                 _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _longJumpForce);
-                //_animationManager.SetTrigger(Constants.AnimationState.Jump);
-                // _rigidbody2D.AddForce(new Vector2(0f, _longJumpForce));
             }
         }
 
