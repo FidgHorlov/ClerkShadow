@@ -5,13 +5,6 @@ namespace ClerkShadow.Data
     public static class Constants 
     {
         public const Ease DoTweenDefaultEase = Ease.InSine;
-        
-        public static class Tags
-        {
-            public const string Player = "Player";
-            public const string Obstacle = "Obstacle";
-            public const string Ground = "Ground";   
-        }
 
         public static class AnimationState
         {

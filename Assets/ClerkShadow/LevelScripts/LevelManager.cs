@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using ClerkShadow.LocalizationSystem;
+using ClerkShadow.ServiceLocator;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -9,9 +11,10 @@ namespace ClerkShadow.LevelScripts
 {
     public class LevelManager : MonoBehaviour
     {
-        private const float LevelDelay = 4f;
+        private const string ChapterLocalizationId = "chapterName";
+
         private const float AnimationDuration = 0.5f;
-        private const string LevelCaptionTemplate = "Розділ {0}";
+        private const float LevelDelay = 4f;
 
         [SerializeField] private GameController _gameController;
         [SerializeField] private Sprite _finalSprite;
@@ -27,18 +30,49 @@ namespace ClerkShadow.LevelScripts
         [SerializeField] private TextMeshProUGUI _levelDescription;
         [Space] [SerializeField] private List<Level> _levelDataList;
 
+        private Level _currentlyLoadedLevel;
+        private Enums.Language _currentLanguage;
+        private string _currentChapterName;
+
         private int _currentLevelID;
         private bool _wasFinalStage;
-        private Level _currentlyLoadedLevel;
 
-        void Start()
+#region Services
+
+        private ILocalization _localization;
+        private ILocalization Localization => _localization ??= Service.Instance.Get<ILocalization>();
+
+#endregion
+
+        private void Start()
         {
             foreach (Level level in _levelDataList)
             {
                 level.SetActive(false);
             }
 
+            InitLevelNumbers();
+            _currentChapterName = GetTranslatedChapterName();
             StartCoroutine(SetPicture());
+        }
+
+        private void InitLevelNumbers()
+        {
+            for (int levelIndex = 0; levelIndex < _levelDataList.Count; levelIndex++)
+            {
+                Level.LevelNumber levelNumber = Level.LevelNumber.Default;
+                if (levelIndex == _levelDataList.Count - 2)
+                {
+                    levelNumber = Level.LevelNumber.BeforeLast;
+                }
+
+                if (levelIndex == _levelDataList.Count - 1)
+                {
+                    levelNumber = Level.LevelNumber.Last;
+                }
+
+                _levelDataList[levelIndex].CurrentLevelNumber = levelNumber;
+            }
         }
 
         private IEnumerator SetPicture()
@@ -70,23 +104,43 @@ namespace ClerkShadow.LevelScripts
                 _levelCaption.gameObject.SetActive(false);
                 _levelDescription.gameObject.SetActive(false);
                 _finalDescription.gameObject.SetActive(true);
-                _finalDescription.text = _currentlyLoadedLevel.LevelDescription;
+                _finalDescription.text = _currentlyLoadedLevel.GetLevelDescription();
                 _backgroundColor.color = Color.white;
                 _wasFinalStage = true;
             }
             else
             {
                 _chapterIcon.sprite = _currentlyLoadedLevel.LoadingSprite;
-                _levelDescription.text = _currentlyLoadedLevel.LevelDescription;
-                _levelCaption.text = string.Format(LevelCaptionTemplate, _currentLevelID + 1);
+                _levelDescription.text = _currentlyLoadedLevel.GetLevelDescription();
+                SetLevelCaption(_currentLevelID + 1);
             }
         }
 
-        private void ShowHideCanvas(bool toShow, float time = -1f)
+        private void SetLevelCaption(int currentLevelID)
         {
+            string chapter = _currentLanguage != Localization.CurrentLanguage ? _currentChapterName : GetTranslatedChapterName();
+            _levelCaption.text = chapter + " " + currentLevelID;
+        }
+
+        private void ShowHideCanvas(bool isActive, float time = -1f)
+        {
+            if (isActive)
+            {
+                _canvasGroup.gameObject.SetActive(true);
+            }
+
             float duration = time < 0 ? AnimationDuration : time;
             _canvasGroup.DOKill(_canvasGroup);
-            _canvasGroup.DOFade(toShow ? 1f : 0f, duration).SetId(_canvasGroup);
+            _canvasGroup.DOFade(isActive ? 1f : 0f, duration)
+                .SetId(_canvasGroup)
+                .OnComplete(() =>
+                {
+                    if (!isActive)
+                    {
+                        _canvasGroup.gameObject.SetActive(false);
+                    }
+                })
+                .SetUpdate(isIndependentUpdate: true);
         }
 
         private void LoadLevel()
@@ -132,6 +186,8 @@ namespace ClerkShadow.LevelScripts
             SaveLevelID();
             StartCoroutine(SetPicture());
         }
+
+        private string GetTranslatedChapterName() => Localization.GetTranslatedValue(Enums.LocalizationTable.Messages, ChapterLocalizationId);
 
         private void SaveLevelID()
         {

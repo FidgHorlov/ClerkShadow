@@ -39,6 +39,17 @@ namespace ClerkShadow.LocalizationSystem
             {Language.Ukrainian, "uk-UA"}
         };
         
+        private static readonly Dictionary<SceneName, string> ScenesDictionary = new Dictionary<SceneName, string>()
+        {
+            {SceneName.Menu, "MenuScene"},
+            {SceneName.Main, "MainScene"}
+        };
+
+        public static string GetLocalizationTable(LocalizationTable table) => LocalizationTableNames.First(tableName => table.Equals(tableName.Key)).Value;
+        public static string GetLocaleId(Language language) => LanguagesLocales.First(languageName => language.Equals(languageName.Key)).Value;
+        public static Language GetLocaleEnum(string localeId) => LanguagesLocales.First(languageName => localeId.Equals(languageName.Value)).Key;
+        public static string GetSceneName(SceneName sceneName) => ScenesDictionary.First(scene => scene.Key.Equals(sceneName)).Value;
+
         public static string GetEnumDescription(Enum value)
         {
             DescriptionAttribute[] da = (DescriptionAttribute[]) (value.GetType().GetField(value.ToString())).GetCustomAttributes(typeof(DescriptionAttribute), false);

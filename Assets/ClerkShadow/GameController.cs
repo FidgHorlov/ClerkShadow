@@ -7,7 +7,6 @@ namespace ClerkShadow
 {
     public class GameController : MonoBehaviour
     {
-        private float _timeForLevel;
         [SerializeField] private LightsController _lightsController;
         [SerializeField] private AudioSource _globalAudioSource;
         [Space]
@@ -19,6 +18,8 @@ namespace ClerkShadow
 
         [Space] 
         [SerializeField] private List<AudioClip> _ambientAudioClips;
+        
+        private float _timeForLevel;
     
         private void Awake()
         {
@@ -62,7 +63,7 @@ namespace ClerkShadow
 
         private void PlayAmbientAudio()
         {
-            int clip = UnityEngine.Random.Range(0, _ambientAudioClips.Count-1);
+            int clip = Random.Range(0, _ambientAudioClips.Count-1);
             _globalAudioSource.clip = _ambientAudioClips[clip];
             _globalAudioSource.Play();
         }
