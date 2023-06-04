@@ -9,10 +9,11 @@ namespace ClerkShadow.LevelScripts
     {
         [SerializeField] private float _levelDuration;
         [SerializeField] private Sprite _loadingSprite;
-        [SerializeField] [Multiline] private string _levelDescription;
+        [Tooltip("The Level Id should be same as in the Localization Table")]
+        [SerializeField] private string _levelId;
 
         public float LevelDuration => _levelDuration;
         public Sprite LoadingSprite => _loadingSprite;
-        public string LevelDescription => _levelDescription;
+        public string LevelId => _levelId;
     }
 }

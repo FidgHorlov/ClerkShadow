@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Tables;
@@ -8,29 +10,55 @@ namespace ClerkShadow.LocalizationSystem
 {
     public class LocalizationService : ILocalization
     {
-        private List<LocalizedStringTable> _localizationTables;
+        public event Action<Enums.Language> LanguageChanged;
+        private const string MissingTextValue = "missingTextValue";
 
-        public Enums.Language CurrentLanguage { get; private set; }
+        private List<LocalizedStringTable> _localizationTables;
+        private bool _wasInited;
+        public Enums.Language CurrentLanguage { private set; get; }
 
         public void Init(List<LocalizedStringTable> localizationTables)
         {
             _localizationTables = localizationTables;
+            _wasInited = true;
         }
 
         public void ChangeLanguage(Enums.Language language)
         {
             CurrentLanguage = language;
+            LanguageChanged?.Invoke(language);
+
+            foreach (Locale locale in LocalizationSettings.AvailableLocales.Locales)
+            {
+                string localeId = Enums.GetLocaleId(language);
+                if (!locale.Identifier.Code.Equals(localeId))
+                {
+                    continue;
+                }
+
+                LocalizationSettings.SelectedLocale = locale;
+                return;
+            }
+
+            Debug.Log($"Language couldn't be changed. Current language -> {LocalizationSettings.SelectedLocale.LocaleName}");
         }
 
         public string GetTranslatedValue(Enums.LocalizationTable tableName, string valueId)
         {
             StringTable resultTable = GetTable(tableName);
-            return resultTable == null ? null : resultTable[valueId].GetLocalizedString(LocalizationSettings.SelectedLocale.Formatter);
+            if (resultTable == null)
+            {
+                return null;
+            }
+
+            string translatedId = resultTable[valueId] == null ? MissingTextValue : valueId;
+            return resultTable[translatedId].GetLocalizedString(LocalizationSettings.SelectedLocale.Formatter);
         }
 
         private StringTable GetTable(Enums.LocalizationTable localizationTable)
-        {
+        { 
             string tableName = Enums.GetLocalizationTable(localizationTable);
+            
             foreach (LocalizedStringTable table in _localizationTables)
             {
                 if (!table.GetTable().TableCollectionName.Contains(tableName))
