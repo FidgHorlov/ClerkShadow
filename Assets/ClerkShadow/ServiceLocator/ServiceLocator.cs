@@ -1,4 +1,5 @@
 using ClerkShadow.LocalizationSystem;
+using ClerkShadow.SceneLoader;
 using UnityEngine;
 
 namespace ClerkShadow.ServiceLocator
@@ -10,6 +11,7 @@ namespace ClerkShadow.ServiceLocator
         {
             Service.Initialize();
             Service.Instance.Register<ILocalization>(new LocalizationService());
+            Service.Instance.Register<ISceneService>(new SceneService());
         }
     }
 }

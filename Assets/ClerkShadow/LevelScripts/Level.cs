@@ -1,4 +1,5 @@
-﻿using ClerkShadow.LocalizationSystem;
+﻿using ClerkShadow.Data;
+using ClerkShadow.LocalizationSystem;
 using ClerkShadow.ServiceLocator;
 using UnityEngine;
 

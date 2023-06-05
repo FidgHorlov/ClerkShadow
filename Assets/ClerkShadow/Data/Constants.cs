@@ -12,5 +12,11 @@ namespace ClerkShadow.Data
             public const string Jump = "Jump";
             public const string Run = "IsRunning";
         }
+
+        public static class PlayerPrefsName
+        {
+            public const string Language = "Language";
+            public const string CurrentLevel = "CurrentLevel";
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ClerkShadow.Data;
 using ClerkShadow.ServiceLocator;
 using UnityEngine.Localization;
 

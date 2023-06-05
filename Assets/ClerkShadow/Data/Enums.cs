@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace ClerkShadow.LocalizationSystem
+namespace ClerkShadow.Data
 {
     public static class Enums
     {
@@ -49,6 +49,7 @@ namespace ClerkShadow.LocalizationSystem
         public static string GetLocaleId(Language language) => LanguagesLocales.First(languageName => language.Equals(languageName.Key)).Value;
         public static Language GetLocaleEnum(string localeId) => LanguagesLocales.First(languageName => localeId.Equals(languageName.Value)).Key;
         public static string GetSceneName(SceneName sceneName) => ScenesDictionary.First(scene => scene.Key.Equals(sceneName)).Value;
+        public static SceneName GetSceneEnum(string sceneName) => ScenesDictionary.First(scene => scene.Value.Equals(sceneName)).Key;
 
         public static string GetEnumDescription(Enum value)
         {

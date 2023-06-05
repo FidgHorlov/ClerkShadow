@@ -1,4 +1,7 @@
+using ClerkShadow.Data;
 using ClerkShadow.LocalizationSystem;
+using ClerkShadow.SceneLoader;
+using ClerkShadow.ServiceLocator;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -36,7 +39,8 @@ namespace ClerkShadow.Ui
 
         private void MenuButtonPressed()
         {
-            SceneManager.LoadScene(Enums.GetSceneName(Enums.SceneName.Menu));
+            //SceneManager.LoadScene(Enums.GetSceneName(Enums.SceneName.Menu));
+            Service.Instance.Get<ISceneService>().LoadScene(Enums.SceneName.Menu);
         }
 
         private void PlayPausePressed()

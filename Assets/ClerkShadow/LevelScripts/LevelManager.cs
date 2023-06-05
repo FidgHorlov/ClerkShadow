@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using ClerkShadow.Data;
 using ClerkShadow.LocalizationSystem;
 using ClerkShadow.ServiceLocator;
 using DG.Tweening;
@@ -191,12 +192,12 @@ namespace ClerkShadow.LevelScripts
 
         private void SaveLevelID()
         {
-            PlayerPrefs.SetInt("CurrentLevel", _currentLevelID);
+            PlayerPrefs.SetInt(Constants.PlayerPrefsName.CurrentLevel, _currentLevelID);
         }
 
         private int LoadLevelID()
         {
-            int currentLevelId = PlayerPrefs.GetInt("CurrentLevel", _currentLevelID);
+            int currentLevelId = PlayerPrefs.GetInt(Constants.PlayerPrefsName.CurrentLevel, _currentLevelID);
             if (currentLevelId < _levelDataList.Count)
             {
                 return currentLevelId;
@@ -209,7 +210,7 @@ namespace ClerkShadow.LevelScripts
 
         private void ResetLevelID()
         {
-            PlayerPrefs.SetInt("CurrentLevel", 0);
+            PlayerPrefs.SetInt(Constants.PlayerPrefsName.CurrentLevel, 0);
         }
     }
 }
