@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93c0578c04f037145ac4b6bac2f71809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _levelDuration: 20
+  _levelData: {fileID: 11400000, guid: 870b68f8568ce8f4aa0d7fe0563d7e1f, type: 2}
   _exit: {fileID: 5659768868498994839}
 --- !u!1001 &2224617250138920212
 PrefabInstance:

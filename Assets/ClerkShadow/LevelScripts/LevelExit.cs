@@ -15,7 +15,6 @@ namespace ClerkShadow.LevelScripts
         {
             if (collider.gameObject.CompareTag("Player"))
             {
-                Debug.Log("AAAAAAAAAA");
                 TriggerEntered?.Invoke(collider);
             }
         }

@@ -1,10 +1,19 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ClerkShadow.LevelScripts
 {
-    public class LevelData : MonoBehaviour
+    [Serializable]
+    [CreateAssetMenu(menuName ="FidgetLand/Create Level Data Asset", fileName = "Level")]
+    public class LevelData : ScriptableObject
     {
-        [SerializeField] private Level[] _levels;
-        public Level[] Levels => _levels;
+        [SerializeField] private float _levelDuration;
+        [SerializeField] private Sprite _loadingSprite;
+        [Tooltip("The Level Id should be same as in the Localization Table")]
+        [SerializeField] private string _levelId;
+
+        public float LevelDuration => _levelDuration;
+        public Sprite LoadingSprite => _loadingSprite;
+        public string LevelId => _levelId;
     }
 }
