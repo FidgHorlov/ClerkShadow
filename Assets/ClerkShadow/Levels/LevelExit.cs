@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace ClerkShadow.LevelScripts
+namespace ClerkShadow.Levels
 {
     [RequireComponent(typeof(BoxCollider2D))]
     public class LevelExit : MonoBehaviour

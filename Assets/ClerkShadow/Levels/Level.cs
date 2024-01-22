@@ -3,7 +3,7 @@ using ClerkShadow.LocalizationSystem;
 using ClerkShadow.ServiceLocator;
 using UnityEngine;
 
-namespace ClerkShadow.LevelScripts
+namespace ClerkShadow.Levels
 {
     public class Level : MonoBehaviour
     {
