@@ -1,3 +1,31 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:761bc9f6992d254bb261bccd73f39b715807bbae88c79262d1b16f0536989e31
-size 1050
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-Assets-Ukrainian (Ukraine) (uk-UA)
+  m_EditorClassIdentifier: 
+  m_GroupName: Localization-Assets-Ukrainian (Ukraine) (uk-UA)
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 6358432f920f5494d8bebdaa1e9db6fd
+  m_SerializeEntries:
+  - m_GUID: 66f165d24dbc6c944a784bfcf4a6ebff
+    m_Address: Clerk_ua
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-uk-UA
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: d96fac7c4cdefb840bfda59a41366f7f, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 1f5cf6e4c535fa04abae956b6dce753b, type: 2}
+    - {fileID: 11400000, guid: aac211c23d4c9c04db2230b56623fb36, type: 2}

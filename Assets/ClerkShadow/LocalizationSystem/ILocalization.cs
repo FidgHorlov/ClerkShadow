@@ -8,8 +8,8 @@ namespace ClerkShadow.LocalizationSystem
 {
     public interface ILocalization : IService
     {
-        event Action<Enums.Language> LanguageChanged;
         Enums.Language CurrentLanguage { get; }
+        bool WasInit { get; }
         void Init(List<LocalizedStringTable> localizationTables);
         void ChangeLanguage(Enums.Language language);
         string GetTranslatedValue(Enums.LocalizationTable tableName, string valueId);

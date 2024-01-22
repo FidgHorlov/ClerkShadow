@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using ClerkShadow.ServiceLocator;
 using UnityEngine;
 using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 namespace ClerkShadow.LocalizationSystem
 {
@@ -16,8 +18,9 @@ namespace ClerkShadow.LocalizationSystem
 
 #endregion
 
-        private void Start()
+        private IEnumerator Start()
         {
+            yield return LocalizationSettings.InitializationOperation;
             Localization.Init(_localizationTables);
         }
     }
