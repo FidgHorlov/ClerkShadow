@@ -9,13 +9,13 @@ namespace ClerkShadow.SceneLoader
 {
     public class SceneService : ISceneService
     {
+        private static readonly int IsRunning = Animator.StringToHash("IsRunning");
+
         private const float LoaderAppearAnimation = 0.5f;
-        private const int LoaderAnimation = 150;
         private const int SceneLoadingTransitions = 200;
 
         private SceneLoaderData _sceneLoaderData;
         private Enums.SceneName _currentScene;
-        private bool _isAnimationPaused;
 
         public void Init(SceneLoaderData sceneLoaderData)
         {
@@ -30,54 +30,49 @@ namespace ClerkShadow.SceneLoader
                 ShowLoader();
             }
 
-            HideLoader();
-            SceneManager.LoadSceneAsync(Enums.GetSceneName(sceneName));
+            AsyncOperation load = SceneManager.LoadSceneAsync(Enums.GetSceneName(sceneName));
             SceneManager.UnloadSceneAsync(Enums.GetSceneName(_currentScene));
             _currentScene = sceneName;
+            HideAnimation(load);
+        }
+
+        private async void HideAnimation(AsyncOperation asyncOperation)
+        {
+            while (!asyncOperation.isDone)
+            {
+                await Task.Yield();
+            }
+
+            ForceStopAnimation();
         }
 
         public void ForceStopAnimation()
         {
-            _isAnimationPaused = true;
+            HideLoader();
         }
 
         public void ShowLoader()
         {
             _sceneLoaderData.LoaderCanvasGroup.gameObject.SetActive(true);
+            _sceneLoaderData.LoaderAnimator.enabled = true;
             RunLoaderAnimation();
-            LoaderSetActive(true, () =>
-            {
-                _isAnimationPaused = false;
-            });
+            LoaderSetActive(true, null);
         }
 
         private void HideLoader(Action activateSceneCallback = null)
         {
-            DOTween.Sequence().SetDelay(SceneLoadingTransitions).OnComplete(() =>
+            LoaderSetActive(false, () =>
             {
-                LoaderSetActive(false, () =>
-                {
-                    _isAnimationPaused = true;
-                    _sceneLoaderData.LoaderCanvasGroup.gameObject.SetActive(false);
-                    activateSceneCallback?.Invoke();
-                });
+                _sceneLoaderData.LoaderAnimator.SetBool(IsRunning, false);
+                _sceneLoaderData.LoaderAnimator.enabled = false;
+                _sceneLoaderData.LoaderCanvasGroup.gameObject.SetActive(false);
+                activateSceneCallback?.Invoke();
             });
         }
 
-        private async void RunLoaderAnimation()
+        private void RunLoaderAnimation()
         {
-            int spriteIndex = 0;
-            while (!_isAnimationPaused)
-            {
-                await Task.Delay(LoaderAnimation);
-                spriteIndex++;
-                if (spriteIndex == _sceneLoaderData.LoaderSprites.Length - 1)
-                {
-                    spriteIndex = 0;
-                }
-
-                _sceneLoaderData.LoaderImage.sprite = _sceneLoaderData.LoaderSprites[spriteIndex];
-            }
+            _sceneLoaderData.LoaderAnimator.SetBool(IsRunning, true);
         }
 
         private void LoaderSetActive(bool isActive, Action loaderFinishCallback)
