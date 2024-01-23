@@ -8,7 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ClerkShadow.LevelScripts
+namespace ClerkShadow.Levels
 {
     public class LevelManager : MonoBehaviour
     {
@@ -30,6 +30,9 @@ namespace ClerkShadow.LevelScripts
         [SerializeField] private TextMeshProUGUI _levelCaption;
         [SerializeField] private TextMeshProUGUI _levelDescription;
         [Space] [SerializeField] private List<Level> _levelDataList;
+        
+        [Space] 
+        [SerializeField] private Camera _camera;
 
         private Level _currentlyLoadedLevel;
         private Enums.Language _currentLanguage;
@@ -87,27 +90,28 @@ namespace ClerkShadow.LevelScripts
             LoadLevel();
         }
 
+        private void SetIfFinalStage(bool isFinalStage)
+        {
+            _chapterIcon.gameObject.SetActive(isFinalStage);
+            _levelCaption.gameObject.SetActive(isFinalStage);
+            _levelDescription.gameObject.SetActive(isFinalStage);
+            _finalDescription.gameObject.SetActive(!isFinalStage);
+            _backgroundColor.color = isFinalStage ? Color.black : Color.white;
+            _wasFinalStage = !isFinalStage;
+        }
+        
         private void SetLevelData()
         {
             if (_wasFinalStage)
             {
-                _chapterIcon.gameObject.SetActive(true);
-                _levelCaption.gameObject.SetActive(true);
-                _levelDescription.gameObject.SetActive(true);
-                _finalDescription.gameObject.SetActive(false);
-                _backgroundColor.color = Color.black;
-                _wasFinalStage = false;
+                SetIfFinalStage(true);
+                return;
             }
 
-            if (_currentlyLoadedLevel.LoadingSprite.Equals(null))
+            if (_currentlyLoadedLevel.LoadingSprite == null)
             {
-                _chapterIcon.gameObject.SetActive(false);
-                _levelCaption.gameObject.SetActive(false);
-                _levelDescription.gameObject.SetActive(false);
-                _finalDescription.gameObject.SetActive(true);
+                SetIfFinalStage(false);
                 _finalDescription.text = _currentlyLoadedLevel.GetLevelDescription();
-                _backgroundColor.color = Color.white;
-                _wasFinalStage = true;
             }
             else
             {
@@ -212,5 +216,20 @@ namespace ClerkShadow.LevelScripts
         {
             PlayerPrefs.SetInt(Constants.PlayerPrefsName.CurrentLevel, 0);
         }
+
+#if UNITY_EDITOR
+        public void SetCustomLevelEditor(int level)
+        {
+            PlayerPrefs.SetInt(Constants.PlayerPrefsName.CurrentLevel, level);   
+        }
+
+        public void ResetLevelEditor()
+        {
+            SetCustomLevelEditor(0);
+        }
+        
+        public int GetCurrentLevelEditor() => PlayerPrefs.GetInt(Constants.PlayerPrefsName.CurrentLevel, _currentLevelID);
+
+#endif
     }
 }

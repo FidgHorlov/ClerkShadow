@@ -1,3 +1,46 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c08315ff599f450572bb02f1643600dacda7842eacb50eded46ac5bbd46af90c
-size 1424
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-String-Tables-Ukrainian (Ukraine) (uk-UA)
+  m_EditorClassIdentifier: 
+  m_GroupName: Localization-String-Tables-Ukrainian (Ukraine) (uk-UA)
+  m_Data:
+    m_SerializedData: []
+  m_GUID: f1e0654a890f8c6469e15c82027c6f8c
+  m_SerializeEntries:
+  - m_GUID: 78276b978cfbb004d8a56accbffdb3ea
+    m_Address: Main_uk-UA
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-uk-UA
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed3a79bf523a58d4e8d796524a46063f
+    m_Address: Menu_uk-UA
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-uk-UA
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 933d40351287e4e468a3b832238a720e
+    m_Address: Messages_uk-UA
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-uk-UA
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: d96fac7c4cdefb840bfda59a41366f7f, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 15dc2bb135102db4da8284808004d695, type: 2}
+    - {fileID: 11400000, guid: 27ef500476471ab45bcce93a8815067c, type: 2}

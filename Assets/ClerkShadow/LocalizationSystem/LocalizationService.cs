@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ClerkShadow.Data;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -11,24 +10,21 @@ namespace ClerkShadow.LocalizationSystem
 {
     public class LocalizationService : ILocalization
     {
-        public event Action<Enums.Language> LanguageChanged;
         private const string MissingTextValue = "missingTextValue";
 
         private List<LocalizedStringTable> _localizationTables;
-        private bool _wasInited;
-        public Enums.Language CurrentLanguage { private set; get; }
+        public Enums.Language CurrentLanguage { get; private set; }
+        public bool WasInit { get; private set; }
 
         public void Init(List<LocalizedStringTable> localizationTables)
         {
             _localizationTables = localizationTables;
-            _wasInited = true;
+            WasInit = true;
         }
 
         public void ChangeLanguage(Enums.Language language)
         {
             CurrentLanguage = language;
-            LanguageChanged?.Invoke(language);
-
             foreach (Locale locale in LocalizationSettings.AvailableLocales.Locales)
             {
                 string localeId = Enums.GetLocaleId(language);
@@ -57,9 +53,9 @@ namespace ClerkShadow.LocalizationSystem
         }
 
         private StringTable GetTable(Enums.LocalizationTable localizationTable)
-        { 
+        {
             string tableName = Enums.GetLocalizationTable(localizationTable);
-            
+
             foreach (LocalizedStringTable table in _localizationTables)
             {
                 if (!table.GetTable().TableCollectionName.Contains(tableName))
